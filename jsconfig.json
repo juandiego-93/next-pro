@@ -8,6 +8,15 @@
       "@pages/*": [
         "pages/*"
       ],
+      "@common/*": [
+        "common/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@layout/*": [
+        "layout/*"
+      ],
     }
   }
 }
