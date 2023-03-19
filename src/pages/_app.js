@@ -12,8 +12,6 @@ function MyApp({ Component, pageProps }) {
       </ProviderAuth>
     </>
   );
-};
+}
 
 export default MyApp;
-
-

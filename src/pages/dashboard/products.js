@@ -9,7 +9,6 @@ import useAlert from '@hooks/useAlert';
 import Alert from '@common/Alert';
 import { deleteProduct } from '@services/api/products';
 
-
 export default function Products() {
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState([]);

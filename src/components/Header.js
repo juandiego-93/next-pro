@@ -4,7 +4,6 @@ import { useAuth } from '@hooks/useAuth';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline/esm';
 
-
 const navigation = [
   { name: 'Dashboard', href: '#', current: true },
   { name: 'Productos', href: '/dashboard/products/', current: false },
@@ -82,9 +81,9 @@ export default function Header() {
                         leaveTo="transform opacity-0 scale-95"
                       >
                         <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <button onClick={() => auth.logout()} className='block px-4 py-2 text-sm text-gray-700'>
-                                  Log out
-                                </button>
+                          <button onClick={() => auth.logout()} className="block px-4 py-2 text-sm text-gray-700">
+                            Log out
+                          </button>
                         </Menu.Items>
                       </Transition>
                     </Menu>
