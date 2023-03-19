@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { XCircleIcon } from '@heroicons/react/solid';
-import Modal from '@common/Modal'
+import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
+import Modal from '@common/Modal';
 import FormProduct from '@components/FormProduct';
 import axios from 'axios';
 import endPoints from '@services/api';
@@ -10,55 +11,49 @@ import { deleteProduct } from '@services/api/products';
 
 
 export default function Products() {
-    const [open, setOpen] = useState(false)
-    const [products, setProducts] = useState([]);
-    const {alert, setAlert, toggleAlert} = useAlert();
+  const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const { alert, setAlert, toggleAlert } = useAlert();
 
-    useEffect(() =>{
-      async function getProducts() {
+  useEffect(() => {
+    async function getProducts() {
       const response = await axios.get(endPoints.products.allProducts);
       setProducts(response.data);
     }
     try {
       getProducts();
-    } catch (error) {console.error()};
+    } catch (error) {
+      console.log(error);
+    }
+  }, [alert]);
 
-    }, [alert]);
-
-    const handleDelete = (id) => {
-      deleteProduct(id).then(()=> {
-        setAlert({
-          active:true,
-          message: 'Delete Product successfully',
-          type: 'error',
-          autoClose: true,
-        });
+  const handleDelete = (id) => {
+    deleteProduct(id).then(() => {
+      setAlert({
+        active: true,
+        message: 'Delete product successfully',
+        type: 'error',
+        autoClose: true,
       });
-    };
+    });
+  };
 
   return (
     <>
-    <Alert alert={alert} handleClose={toggleAlert} />
-      <div class="lg:flex lg:items-center lg:justify-between mb-8">
-        <div class="min-w-0 flex-1">
-          <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">List of products</h2>
-          <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6"></div>
+      <Alert alert={alert} handleClose={toggleAlert} />
+      <div className="lg:flex lg:items-center lg:justify-between mb-8">
+        <div className="flex-1 min-w-0">
+          <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">List of Products</h2>
         </div>
-        <div class="mt-5 flex lg:mt-0 lg:ml-4">
-          <span class="sm:ml-3">
+        <div className="mt-5 flex lg:mt-0 lg:ml-4">
+          <span className="sm:ml-3">
             <button
               type="button"
-              class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={()=> setOpen(true)}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => setOpen(true)}
             >
-              <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path
-                  fill-rule="evenodd"
-                  d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              Add product
+              <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+              Add Product
             </button>
           </span>
         </div>
@@ -112,15 +107,12 @@ export default function Products() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
+                        <Link href={`/dashboard/edit/${product.id}`} className="text-indigo-600 hover:text-indigo-900">
                           Edit
-                        </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <XCircleIcon className='flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer'
-                          aria-hidden='true'
-                          onClick={() => handleDelete(product.id)}
-                          />
+                        <XCircleIcon className="flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer" aria-hidden="true" onClick={() => handleDelete(product.id)} />
                       </td>
                     </tr>
                   ))}
@@ -131,7 +123,7 @@ export default function Products() {
         </div>
       </div>
       <Modal open={open} setOpen={setOpen}>
-        <FormProduct setOpen={setOpen} setAlert={setAlert}/>
+        <FormProduct setOpen={setOpen} setAlert={setAlert} />
       </Modal>
     </>
   );

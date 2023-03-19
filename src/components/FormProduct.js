@@ -1,21 +1,29 @@
 import { useRef } from 'react';
-import { addProduct } from '@services/api/products';
+import { addProduct, updateProduct } from '@services/api/products';
+import { useRouter } from 'next/router';
 
-export default function FormProduct({setOpen, setAlert, product}) {
-    const formRef= useRef(null);
 
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const formData = new FormData(formRef.current);
-      const data = {
-        title: formData.get('title'),
-        price: parseInt(formData.get('price')),
-        description: formData.get('description'),
-        categoryId: parseInt(formData.get('category')),
-        images: [formData.get('images').name],
-      };
-        console.log(data)
-        addProduct(data)
+export default function FormProduct({ setOpen, setAlert, product }) {
+  const formRef = useRef(null);
+  const router = useRouter()
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(formRef.current);
+    const data = {
+      title: formData.get('title'),
+      price: parseInt(formData.get('price')),
+      description: formData.get('description'),
+      categoryId: parseInt(formData.get('category')),
+      images: [formData.get('images').name],
+    };
+    if (product) {
+      updateProduct(product.id, data)
+      .then(()=> {
+          router.push('/dashboard/products/')
+      })
+    } else {
+      addProduct(data)
         .then(() => {
           setAlert({
             active: true,
@@ -34,6 +42,7 @@ export default function FormProduct({setOpen, setAlert, product}) {
           });
         });
     }
+  };
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
@@ -76,9 +85,9 @@ export default function FormProduct({setOpen, setAlert, product}) {
                 Description
               </label>
               <textarea
+                defaultValue={product?.description}
                 name="description"
                 id="description"
-                defaultValue={product?.description}
                 autoComplete="description"
                 rows="3"
                 className="form-textarea mt-1 block w-full mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
